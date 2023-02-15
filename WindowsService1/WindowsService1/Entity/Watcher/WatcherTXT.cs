@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RadencyService.Lib.File;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace RadencyService.Entity.Watcher
                 {
                     results.addResut(line.Trim());
                 }
-                results.jsonSerializerResults(pathWrite, e.Name);
+                Json.jsonSerializer<List<Result>>(pathWrite, e.Name, results.results);
             }
         }
 

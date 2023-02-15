@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using RadencyService.Lib.File;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -37,7 +38,7 @@ namespace RadencyService.Entity.Watcher
             {
                 results.addResut(csvReader);
             }
-            results.jsonSerializerResults(pathWrite, e.Name);
+            Json.jsonSerializer<List<Result>>(pathWrite, e.Name, results.results);
         }
 
         protected override void Watcher_Created(object sender, FileSystemEventArgs e)

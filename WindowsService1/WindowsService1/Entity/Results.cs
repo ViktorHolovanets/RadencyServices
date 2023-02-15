@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using RadencyService.Entity.Log;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,10 +40,11 @@ namespace RadencyService.Entity
                     res.addService(servis);
                 }
                 servis.addPayer(p);
+                SingletonLog.GetInstance().metaLog.setField(OperationLog.parsed_lines);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                SingletonLog.GetInstance().metaLog.setField(OperationLog.found_errors);
             }
         }
         public void addResut(CsvReader csvReader)
@@ -67,18 +69,11 @@ namespace RadencyService.Entity
                     res.addService(servis);
                 }
                 servis.addPayer(p);
+                SingletonLog.GetInstance().metaLog.setField(OperationLog.parsed_lines);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-            }
-        }
-        public void jsonSerializerResults(string pathDirectory, string nameFile)
-        {
-            var directory = Directory.CreateDirectory($"{pathDirectory}\\{DateTime.Now.ToString("d")}");
-            using (FileStream fs = new FileStream($"{directory.FullName}\\{nameFile}.json", FileMode.Create))
-            {
-                JsonSerializer.Serialize<List<Result>>(fs, results);
+                SingletonLog.GetInstance().metaLog.setField(OperationLog.found_errors);
             }
         }
     }
