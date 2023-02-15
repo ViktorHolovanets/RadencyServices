@@ -24,7 +24,7 @@ namespace RadencyService.Servises.WatcherService
             watchers.Add(new WatcherTXT(pathA,pathB));
             watchers.Add(new WatcherCSV(pathA, pathB));
         }
-        public void Srart()
+        public void Start()
         {
             foreach (var item in watchers)
             {
@@ -35,7 +35,7 @@ namespace RadencyService.Servises.WatcherService
         {
             foreach (var item in watchers)
             {
-                Task.Run(item.Start);
+                Task.Run(item.Stop);
             }
         }
     }
