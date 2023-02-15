@@ -1,4 +1,5 @@
-﻿using RadencyService.Lib.File;
+﻿using RadencyService.Entity.Log;
+using RadencyService.Lib.File;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,15 +28,45 @@ namespace RadencyService.Entity.Watcher
                 Results results = new Results();
                 while ((line = sr.ReadLine()) != null)
                 {
-                    results.addResut(line.Trim());
+                    results.addRes<string>(results.results, line.Trim(), addResult);
                 }
-                Json.jsonSerializer<List<Result>>(pathWrite, e.Name, results.results);
+                Save.jsonSerializer<List<Result>>(pathWrite, e.Name, results.results);
             }
         }
-
+        public List<Result> addResult(List<Result> results, string str)
+        {
+            var line = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            try
+            {
+                Payer p = new Payer(line[0] + line[1],
+                    decimal.Parse(line[5].Replace(" ", "").Replace('.', ',')),
+                    DateTime.ParseExact(line[6].Replace(" ", ""), "yyyy-dd-MM", null),
+                    long.Parse(line[7].Replace(" ", "")));
+                var city = line[2].Replace("\u201C", "").Replace(" ", "");
+                var res = results.FirstOrDefault(s => s.city == city);
+                if (res == null)
+                {
+                    res = new Result(city);
+                    results.Add(res);
+                }
+                var servis = res.services.FirstOrDefault(s => s.name == line[8].Replace(" ", ""));
+                if (servis == null)
+                {
+                    servis = new Service(line[8].Replace(" ", ""));
+                    res.addService(servis);
+                }
+                servis.addPayer(p);
+                SingletonLog.GetInstance().metaLog.setField(OperationLog.parsed_lines);
+            }
+            catch (Exception ex)
+            {
+                SingletonLog.GetInstance().metaLog.setField(OperationLog.found_errors);
+            }
+            return results;
+        }
         protected override void Watcher_Created(object sender, FileSystemEventArgs e)
         {
-           
+
         }
 
         protected override void Watcher_Renamed(object sender, RenamedEventArgs e)
