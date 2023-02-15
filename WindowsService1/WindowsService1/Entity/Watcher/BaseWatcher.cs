@@ -37,6 +37,13 @@ namespace RadencyService.Entity.Watcher
             watcher.EnableRaisingEvents = false;
             isRunning = false;
         }
-        
+        public void Pause()
+        {
+            watcher.EnableRaisingEvents = false;
+        }
+        public void Continue()
+        {
+            watcher.EnableRaisingEvents = true;
+        }
     }
 }

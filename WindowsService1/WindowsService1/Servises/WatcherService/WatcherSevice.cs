@@ -33,5 +33,13 @@ namespace RadencyService.Servises.WatcherService
         {
             watchers.ForEach(t => t.Stop());
         }
+        public void Pause()
+        {
+            watchers.ForEach(t => { Task.Run(t.Pause); });
+        }
+        public void Continue()
+        {
+            watchers.ForEach(t => { Task.Run(t.Continue); });
+        }
     }
 }

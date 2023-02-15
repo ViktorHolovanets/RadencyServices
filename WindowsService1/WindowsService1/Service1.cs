@@ -23,6 +23,9 @@ namespace WindowsService1
         public Service1()
         {
             InitializeComponent();
+            this.CanStop = true;
+            this.CanPauseAndContinue = true;
+            this.AutoLog = true;
         }
 
         protected override void OnStart(string[] args)
@@ -36,6 +39,14 @@ namespace WindowsService1
         {
             watcherSevice.Stop();
             Thread.Sleep(1000);
+        }
+        protected override void OnPause()
+        {
+            Task.Run(watcherSevice.Pause);
+        }
+        protected override void OnContinue() 
+        {
+            Task.Run(watcherSevice.Continue);
         }
     }
 }
