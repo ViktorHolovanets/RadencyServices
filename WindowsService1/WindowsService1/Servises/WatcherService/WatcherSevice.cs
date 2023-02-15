@@ -26,17 +26,12 @@ namespace RadencyService.Servises.WatcherService
         }
         public void Start()
         {
-            foreach (var item in watchers)
-            {
-                Task.Run(item.Start);
-            }
+            watchers.ForEach(t => { Task.Run(t.Start); });
+
         }
         public void Stop()
         {
-            foreach (var item in watchers)
-            {
-                Task.Run(item.Stop);
-            }
+            watchers.ForEach(t => t.Stop());
         }
     }
 }
