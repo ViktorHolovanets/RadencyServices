@@ -11,10 +11,10 @@ namespace RadencyService.Entity.Watcher
     public abstract class BaseWatcher
     {
         protected FileSystemWatcher watcher { get; set; }
-        bool isRunning;
+       
         protected BaseWatcher(string path, string filter) 
         {         
-            isRunning= true;
+      
             watcher = new FileSystemWatcher(path,filter);
             watcher.Created += Watcher_Created;
             watcher.Changed += Watcher_Changed;
@@ -27,15 +27,10 @@ namespace RadencyService.Entity.Watcher
         public  void Start()
         {
             watcher.EnableRaisingEvents = true;
-            while (isRunning)
-            {
-                Thread.Sleep(1000);
-            }
         }
         public void Stop()
         {
             watcher.EnableRaisingEvents = false;
-            isRunning = false;
         }
         public void Pause()
         {

@@ -1,9 +1,11 @@
-﻿using RadencyService.Entity.Watcher;
+﻿using RadencyService.Entity.Log;
+using RadencyService.Entity.Watcher;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RadencyService.Servises.WatcherService
@@ -12,6 +14,7 @@ namespace RadencyService.Servises.WatcherService
     {
         string pathA;
         string pathB;
+        bool isRunning;
         List<BaseWatcher> watchers;
         public WatcherSevice()
         {
@@ -27,11 +30,17 @@ namespace RadencyService.Servises.WatcherService
         public void Start()
         {
             watchers.ForEach(t => { Task.Run(t.Start); });
-
+            while (isRunning)
+            {
+                if (DateTime.Now.ToString("HH:mm") == "23:57")
+                    SingletonLog.GetInstance().saveLog();
+                Thread.Sleep(1000);
+            }
         }
         public void Stop()
         {
             watchers.ForEach(t => t.Stop());
+            isRunning= false;
         }
         public void Pause()
         {
