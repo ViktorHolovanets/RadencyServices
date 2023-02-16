@@ -19,18 +19,21 @@ namespace WindowsService1
     public partial class Service1 : ServiceBase
     {
         WatcherSevice watcherSevice;
-
-        public Service1()
+        readonly string pathA;
+        readonly string pathB;
+        public Service1(string pathA, string pathB)
         {
             InitializeComponent();
             this.CanStop = true;
             this.CanPauseAndContinue = true;
             this.AutoLog = true;
+            this.pathA = pathA;
+            this.pathB = pathB;
         }
 
         protected override void OnStart(string[] args)
         {
-            watcherSevice = new WatcherSevice();
+            watcherSevice = new WatcherSevice(pathA, pathB);
             watcherSevice.createWatchers();
             Thread loggerThread = new Thread(new ThreadStart(watcherSevice.Start));
             loggerThread.Start();

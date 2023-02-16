@@ -30,7 +30,11 @@ namespace RadencyService.Entity.Watcher
                 {
                     results.addRes<string>(results.results, line.Trim(), addResult);
                 }
-                Save.jsonSerializer<List<Result>>(pathWrite, e.Name, results.results);
+                if (results.results.Count == 0)
+                    SingletonLog.GetInstance().metaLog.Operation(OperationLog.invalidFiles);
+                else
+                    Save.jsonSerializer<List<Result>>(pathWrite, e.Name, results.results);
+                SingletonLog.GetInstance().metaLog.Operation(OperationLog.parsedFiles);
             }
         }
         public List<Result> addResult(List<Result> results, string str)
@@ -56,11 +60,11 @@ namespace RadencyService.Entity.Watcher
                     res.addService(servis);
                 }
                 servis.addPayer(p);
-                SingletonLog.GetInstance().metaLog.setField(OperationLog.parsed_lines);
+                SingletonLog.GetInstance().metaLog.Operation(OperationLog.parsedLines);
             }
             catch (Exception ex)
             {
-                SingletonLog.GetInstance().metaLog.setField(OperationLog.found_errors);
+                SingletonLog.GetInstance().metaLog.Operation(OperationLog.foundErrors);
             }
             return results;
         }

@@ -16,11 +16,14 @@ namespace RadencyService.Servises.WatcherService
         string pathB;
         bool isRunning;
         List<BaseWatcher> watchers;
-        public WatcherSevice()
+        public WatcherSevice(string pathA,string pathB)
         {
-            pathA = ConfigurationManager.AppSettings["pathA"].ToString();
-            pathB = ConfigurationManager.AppSettings["pathB"].ToString();
-            watchers= new List<BaseWatcher>();
+            this.pathA = pathA;
+            this.pathB = pathB;
+            isRunning = true;
+            //pathA = ConfigurationManager.AppSettings["pathA"].ToString();
+            //pathB = ConfigurationManager.AppSettings["pathB"].ToString();
+            watchers = new List<BaseWatcher>();
         }
         public void createWatchers()
         {
@@ -32,7 +35,7 @@ namespace RadencyService.Servises.WatcherService
             watchers.ForEach(t => { Task.Run(t.Start); });
             while (isRunning)
             {
-                if (DateTime.Now.ToString("HH:mm") == "23:57")
+                if (DateTime.Now.ToString("HH:mm") == "14:58" && SingletonLog.GetInstance().metaLog.isSave())
                     SingletonLog.GetInstance().saveLog();
                 Thread.Sleep(1000);
             }
