@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WindowsService1;
 
-namespace RadencyService.Entity
+namespace RadencyService.Entity.AdditionalObjects
 {
     public class Result
     {

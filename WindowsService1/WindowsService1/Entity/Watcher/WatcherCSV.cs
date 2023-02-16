@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using RadencyService.Entity.AdditionalObjects;
 using RadencyService.Entity.Log;
 using RadencyService.Lib.File;
 using System;
@@ -7,10 +8,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using static RadencyService.Entity.Results;
+
+
 
 namespace RadencyService.Entity.Watcher
 {
@@ -36,7 +35,7 @@ namespace RadencyService.Entity.Watcher
 
             var streamReader = File.OpenText(e.FullPath);
             var csvReader = new CsvReader(streamReader, csvConfig);
-
+            csvReader.Read();
             while (csvReader.Read())
             {
                 results.addRes<CsvReader>(results.results,csvReader, addResult);

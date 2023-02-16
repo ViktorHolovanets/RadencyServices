@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RadencyService.Entity
+namespace RadencyService.Entity.AdditionalObjects
 {
     public class Payer
     {

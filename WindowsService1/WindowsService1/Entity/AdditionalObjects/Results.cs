@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace RadencyService.Entity
+namespace RadencyService.Entity.AdditionalObjects
 {
     public class Results
     {

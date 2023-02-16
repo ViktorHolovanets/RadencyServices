@@ -115,10 +115,10 @@
   <ItemGroup>
     <Compile Include="Entity\Log\MetaLog.cs" />
     <Compile Include="Entity\Log\SingletonLog.cs" />
-    <Compile Include="Entity\Payer.cs" />
-    <Compile Include="Entity\Result.cs" />
-    <Compile Include="Entity\Results.cs" />
-    <Compile Include="Entity\Service.cs" />
+    <Compile Include="Entity\AdditionalObjects\Payer.cs" />
+    <Compile Include="Entity\AdditionalObjects\Result.cs" />
+    <Compile Include="Entity\AdditionalObjects\Results.cs" />
+    <Compile Include="Entity\AdditionalObjects\Service.cs" />
     <Compile Include="Entity\Watcher\BaseWatcher.cs" />
     <Compile Include="Entity\Watcher\WatcherCSV.cs" />
     <Compile Include="Entity\Watcher\WatcherTXT.cs" />
