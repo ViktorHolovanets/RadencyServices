@@ -35,7 +35,7 @@ namespace RadencyService.Servises.WatcherService
             watchers.ForEach(t => { Task.Run(t.Start); });
             while (isRunning)
             {
-                if (DateTime.Now.ToString("HH:mm") == "14:58" && SingletonLog.GetInstance().metaLog.isSave())
+                if (DateTime.Now.ToString("HH:mm") == "23:59" && SingletonLog.GetInstance().metaLog.isSave())
                     SingletonLog.GetInstance().saveLog();
                 Thread.Sleep(1000);
             }
