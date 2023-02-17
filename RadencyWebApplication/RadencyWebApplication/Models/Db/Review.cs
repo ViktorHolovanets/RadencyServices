@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RadencyWebApplication.Models.Db
 {
@@ -6,10 +7,12 @@ namespace RadencyWebApplication.Models.Db
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
         public string Message { get; set; }
+        [Required]
         public string Reviewer { get; set; }
         public int BookId { get; set; }
-        public Book Book { get; set; }
+        public Book?  Book { get; set; }
         
     }
 }
