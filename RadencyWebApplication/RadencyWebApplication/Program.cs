@@ -12,7 +12,9 @@ builder.Configuration.AddJsonFile("config.json");
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApiContext>();
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();  //Logger write in the Console
+builder.Logging.AddDebug();  //Logger write in the Debug
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

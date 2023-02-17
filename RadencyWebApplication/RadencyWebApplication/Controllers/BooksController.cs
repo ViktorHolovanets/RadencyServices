@@ -6,6 +6,7 @@ using RadencyWebApplication.Models.Entity;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,21 +17,22 @@ namespace RadencyWebApplication.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
+        ILogger<BooksController> _logger;
         ApiContext _context;
         private readonly IConfiguration _config;
-        public BooksController(ApiContext apiContext, IConfiguration config)
+        public BooksController(ApiContext apiContext, IConfiguration config, ILogger<BooksController> logger)
         {
             _context = apiContext;
             _config = config;
+            _logger = logger;
         }
-        Random rnd = new Random();
-
-
-
+       
         [HttpGet("[controller]")]
         public async Task<IActionResult> Get()
         {
-            string order = HttpContext.Request.Query["order"].ToString();
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
+            string order = request.Query["order"].ToString();
             var res = await GetAllBooks();
 
             res =  order == "author" ?
@@ -85,7 +87,7 @@ namespace RadencyWebApplication.Controllers
             {
                 return Results.BadRequest();
             }
-            var temp = await  _context?.Books.FirstOrDefaultAsync(b => b.Id == book.Id);
+            var temp = await  _context.Books.FirstOrDefaultAsync(b => b.Id == book.Id);
             if (temp == null)
             {
                  _context?.Books.Add(book);
@@ -173,6 +175,15 @@ namespace RadencyWebApplication.Controllers
                     };
             return res;
 
+        }
+        private void WriteLogRequest(HttpRequest request)
+        {
+            string h = "";
+            foreach (var header in request.Headers)
+            {
+                h+=($"{header.Key}\t{header.Value}\n");
+            }
+            _logger.LogInformation(h);
         }
     }
 }
