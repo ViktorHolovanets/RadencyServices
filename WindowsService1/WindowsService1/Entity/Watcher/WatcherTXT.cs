@@ -63,6 +63,7 @@ namespace RadencyService.Entity.Watcher
             {
                 SingletonLog.GetInstance().metaLog.Operation(OperationLog.foundErrors);
             }
+
             return results;
         }
         protected override void Watcher_Created(object sender, FileSystemEventArgs e)
