@@ -26,7 +26,7 @@ namespace RadencyWebApplication.Controllers
             _config = config;
             _logger = logger;
         }
-       
+
         [HttpGet("[controller]")]
         public async Task<IActionResult> Get()
         {
@@ -34,8 +34,11 @@ namespace RadencyWebApplication.Controllers
             WriteLogRequest(request);
             string order = request.Query["order"].ToString();
             var res = await GetAllBooks();
-
-            res =  order == "author" ?
+            if (res == null)
+            {
+                _logger.LogWarning($"No related data to books");
+            }
+            res = order == "author" ?
                 res.OrderBy(r => r.author)
                 : order == "title" ?
                 res.OrderBy(r => r.title)
@@ -45,7 +48,9 @@ namespace RadencyWebApplication.Controllers
         [HttpGet("recommended")]
         public async Task<IResult> GetRecommended()
         {
-            string genre = HttpContext.Request.Query["genre"].ToString();
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
+            string genre = request.Query["genre"].ToString();
             var res = await GetAllBooks(genre);
             res = res.OrderByDescending(b => b.rating).Take(10);
             return Results.Json(res, statusCode: 200);
@@ -54,7 +59,9 @@ namespace RadencyWebApplication.Controllers
         [HttpGet("[controller]/{id}")]
         public async Task<IResult> Get(int id)
         {
-            var result =   _context?.Books.Where(b => b.Id == id).
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
+            var result = _context?.Books.Where(b => b.Id == id).
                 GroupJoin(_context.Reviews,
                 book => book.Id,
                 review => review.BookId,
@@ -75,22 +82,28 @@ namespace RadencyWebApplication.Controllers
                     reviews = book.review
                 }).ToList();
             if (result == null)
+            {
+                _logger.LogWarning($"No related data to a book with ID {id} ");
                 return Results.BadRequest(new { message = "Not fount book" });
+            }
             return Results.Json(result);
         }
 
 
         [HttpPost("[controller]/save")]
-        public async  Task<IResult> Post(Book book)
+        public async Task<IResult> Post(Book book)
         {
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
             if (!ModelState.IsValid)
             {
                 return Results.BadRequest();
             }
-            var temp = await  _context.Books.FirstOrDefaultAsync(b => b.Id == book.Id);
+            var temp = await _context.Books.FirstOrDefaultAsync(b => b.Id == book.Id);
             if (temp == null)
             {
-                 _context?.Books.Add(book);
+                _context?.Books.Add(book);
+                _logger.LogInformation($"Created a new book with ID {book.Id}");
                 temp = book;
             }
             else
@@ -100,7 +113,6 @@ namespace RadencyWebApplication.Controllers
                 temp.Cover = book.Cover;
                 temp.Content = book.Content;
                 temp.Genre = book.Genre;
-                //_context?.Books.Update(book);
             }
             await _context.SaveChangesAsync();
             return Results.Json(temp, statusCode: 201);
@@ -110,10 +122,14 @@ namespace RadencyWebApplication.Controllers
         [HttpPut("[controller]/{id}/review")]
         public async Task<IResult> SetReview(int id, Review review)
         {
-
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
             var book = _context.Books.FirstOrDefault(b => b.Id == id);
             if (book == null || !ModelState.IsValid)
+            {
+                _logger.LogWarning("Bad requst");
                 return Results.BadRequest();
+            }
             review.Book = book;
             _context.Reviews.Add(review);
             _context.SaveChanges();
@@ -122,7 +138,8 @@ namespace RadencyWebApplication.Controllers
         [HttpPut("[controller]/{id}/rate")]
         public async Task<IResult> SetRating(int id, Rating rating)
         {
-
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
             if (book == null || !ModelState.IsValid)
                 return Results.BadRequest();
@@ -136,6 +153,8 @@ namespace RadencyWebApplication.Controllers
         [HttpDelete("[controller]/{id}")]
         public async Task<IResult> Delete(int id)
         {
+            var request = HttpContext.Request;
+            WriteLogRequest(request);
             string secret = HttpContext.Request.Query["secret"].ToString();
             var secretConfig = _config["secretKey"];
             if (secret == secretConfig)
@@ -163,27 +182,30 @@ namespace RadencyWebApplication.Controllers
                              reviews = k.Count()
                          };
 
-           var res= from r in result
-                    join rating in _context.Ratings on r.book.Id equals rating.BookId into gR
-                    select new BookInfo()
-                    {
-                        id = r.book.Id,
-                        title = r.book.Title,
-                        author = r.book.Author,
-                        rating = (decimal)gR.Average(r => r.Score),
-                        reviewsNumber = r.reviews
-                    };
+            var res = from r in result
+                      join rating in _context.Ratings on r.book.Id equals rating.BookId into gR
+                      select new BookInfo()
+                      {
+                          id = r.book.Id,
+                          title = r.book.Title,
+                          author = r.book.Author,
+                          rating = (decimal)gR.Average(r => r.Score),
+                          reviewsNumber = r.reviews
+                      };
             return res;
 
         }
         private void WriteLogRequest(HttpRequest request)
         {
-            string h = "";
+            string h = "Headers\n";
             foreach (var header in request.Headers)
             {
-                h+=($"{header.Key}\t{header.Value}\n");
+                h += ($"{header.Key}\t{header.Value}\n");
             }
             _logger.LogInformation(h);
+            _logger.LogInformation($"Path: {request.Path}");
+            _logger.LogInformation($"Query string: {request.QueryString}");
+
         }
     }
 }
