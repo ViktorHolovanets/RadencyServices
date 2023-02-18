@@ -26,14 +26,18 @@ namespace RadencyWebApplication.Controllers
             _config = config;
             _logger = logger;
         }
-
+        [HttpGet("[controller]/all")]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(_context.Books);
+        }
         [HttpGet("[controller]")]
         public async Task<IActionResult> Get()
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
             string order = request.Query["order"].ToString();
-            var res = await GetAllBooks();
+            var res = GetAllBooks();
             if (res == null)
             {
                 _logger.LogWarning($"No related data to books");
@@ -43,7 +47,7 @@ namespace RadencyWebApplication.Controllers
                 : order == "title" ?
                 res.OrderBy(r => r.title)
                 : res;
-            return Ok(res);
+            return Ok(res.ToList());
         }
         [HttpGet("recommended")]
         public async Task<IResult> GetRecommended()
@@ -51,37 +55,38 @@ namespace RadencyWebApplication.Controllers
             var request = HttpContext.Request;
             WriteLogRequest(request);
             string genre = request.Query["genre"].ToString();
-            var res = await GetAllBooks(genre);
+            var res = GetAllBooks(genre);
             res = res.OrderByDescending(b => b.rating).Take(10);
             return Results.Json(res, statusCode: 200);
         }
 
         [HttpGet("[controller]/{id}")]
-        public async Task<IResult> Get(int id)
+        public IResult GetAsync(int id)
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
+
             var result = _context?.Books.Where(b => b.Id == id).
-                GroupJoin(_context.Reviews,
-                book => book.Id,
-                review => review.BookId,
-                (book, review) => new
-                {
-                    book,
-                    review = review.Select(rew => new { rew.Id, rew.Message, rew.Reviewer }),
-                }).ToList()
-                .GroupJoin(_context.Ratings,
-                book => book.book.Id,
-                rating => rating.BookId,
-                (book, rating) => new
-                {
-                    id = book.book.Id,
-                    title = book.book.Title,
-                    author = book.book.Author,
-                    rating = rating.Average(r => r.Score),
-                    reviews = book.review
-                }).ToList();
-            if (result == null)
+               GroupJoin(_context.Reviews,
+               book => book.Id,
+               review => review.BookId,
+               (book, review) => new
+               {
+                   book,
+                   review = review.Select(rew => new { rew.Id, rew.Message, rew.Reviewer }),
+               }).ToList()
+               .GroupJoin(_context.Ratings,
+               book => book.book.Id,
+               rating => rating.BookId,
+               (book, rating) => new
+               {
+                   id = book.book.Id,
+                   title = book.book.Title,
+                   author = book.book.Author,
+                   rating = rating.Average(r => r.Score),
+                   reviews = book.review
+               }).ToList();
+            if (result.Count() < 1)
             {
                 _logger.LogWarning($"No related data to a book with ID {id} ");
                 return Results.BadRequest(new { message = "Not fount book" });
@@ -169,7 +174,7 @@ namespace RadencyWebApplication.Controllers
             }
             return Results.BadRequest(new { message = "Invalid secret code" });
         }
-        private async Task<IQueryable<BookInfo>> GetAllBooks(string? genre = null)
+        private IQueryable<BookInfo> GetAllBooks(string? genre = null)
         {
 
             var result = from book in _context.Books

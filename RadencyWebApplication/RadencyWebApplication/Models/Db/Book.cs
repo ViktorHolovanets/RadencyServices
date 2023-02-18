@@ -15,8 +15,7 @@ namespace RadencyWebApplication.Models.Db
         public string Cover { get; set; }
         [Required]
         public string Content { get; set; }
-        [Required]
-        public string Author { get; set; }
+        public string? Author { get; set; }
         [Required]
         public string Genre { get; set; }
 

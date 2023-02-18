@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RadencyWebApplication.Models.Db;
+using RadencyWebApplication.Models.Db.Seed;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,9 @@ builder.Services.AddDbContext<ApiContext>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();  //Logger write in the Console
 builder.Logging.AddDebug();  //Logger write in the Debug
-var app = builder.Build();
 
+var app = builder.Build();
+Seed(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -31,3 +33,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+async void Seed(IHost host)
+{
+    using var scope = host.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var _context = services.GetRequiredService<ApiContext>();
+    if (_context != null)
+        await SeedDateBase.SeedAsync(_context);
+}
