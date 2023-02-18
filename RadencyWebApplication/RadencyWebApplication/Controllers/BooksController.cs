@@ -26,11 +26,7 @@ namespace RadencyWebApplication.Controllers
             _config = config;
             _logger = logger;
         }
-        [HttpGet("[controller]/all")]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(_context.Books);
-        }
+
         [HttpGet("[controller]")]
         public async Task<IActionResult> Get()
         {
@@ -65,6 +61,7 @@ namespace RadencyWebApplication.Controllers
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
+
 
             var result = _context.Books.Where(b => b.Id == id).
                GroupJoin(_context.Reviews,

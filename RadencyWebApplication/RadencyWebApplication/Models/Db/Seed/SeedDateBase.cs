@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using static System.Net.WebRequestMethods;
 
 namespace RadencyWebApplication.Models.Db.Seed
 {
@@ -27,7 +28,7 @@ namespace RadencyWebApplication.Models.Db.Seed
                             {
 
                                 Title = item.title,
-                                Cover = item.cover_i,
+                                Cover = $"https://covers.openlibrary.org/b/id/{item.cover_i}-M.jpg",
                                 Content = "Палітурка книги тверда, виготовлена з картону. Вона захищає сторінки. Обкладинка кольорова. Я бачу красивий малюнок. На ньому намальовані хлопчик та дівчинка. Вони багато часу присвячують читанню книжок. На обкладинці містяться також найважливіші відомості про неї. Книга називається «Читанка», ми будемо вивчати її на уроці читання. Написав автор О.Я. Савченко. На першому форзаці малюнок розповідає про створення книги, на другому я бачу бібліотеку. А видало цю чудову книжку видавництво «Освіта». Книга має 158 сторінок.",
                                 Author = item.author_name[0].ToString() ?? "author",
                                 Genre = i % 2 == 0 ? "horror" : i % 3 == 0 ? "romance" : "thrillers"
