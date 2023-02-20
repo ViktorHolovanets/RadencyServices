@@ -16,8 +16,10 @@ builder.Services.AddDbContext<ApiContext>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();  //Logger write in the Console
 builder.Logging.AddDebug();  //Logger write in the Debug
+builder.Services.AddCors();
 
 var app = builder.Build();
+app.UseCors(builder => builder.AllowAnyOrigin());
 Seed(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

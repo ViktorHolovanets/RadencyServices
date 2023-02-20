@@ -40,7 +40,7 @@ namespace RadencyWebApplication.Models.Db.Seed
                             {
                                 context.Reviews.Add(new Review()
                                 {
-                                    Message = $"message{i}",
+                                    Message = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus dignissimos quae id minus sed vero dolor repellat, ullam a ad quod repellendus sunt similique nisi aspernatur, architecto consequatur eaque quas?",
                                     Reviewer = $"reviewer{i}",
                                     BookId = book.Id
                                 });

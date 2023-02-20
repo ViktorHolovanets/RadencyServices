@@ -82,6 +82,7 @@ namespace RadencyWebApplication.Controllers
                    author = book.book.Author,
                    cover = book.book.Cover,
                    content = book.book.Content,
+                   genre= book.book.Genre,
                    rating = rating.Average(r => r.Score),
                    reviews = book.review
                }).ToList();
@@ -177,7 +178,7 @@ namespace RadencyWebApplication.Controllers
         {
 
             var result = from book in _context.Books
-                         where genre != null ? book.Genre == genre : 1 == 1
+                         where !String.IsNullOrEmpty(genre) ? book.Genre == genre : 1 == 1
                          join review in _context.Reviews on book.Id equals review.BookId
                          group review by book into k
                          select new

@@ -1,0 +1,40 @@
+<div class="bg-black/50 fixed top-0 right-0 left-0 bottom-0"></div>
+  <div
+    class="h-75  w-50 absolute m-auto bg-white position-absolute top-50 start-50 translate-middle rounded p-2">
+    <div class="h-50 w-100 overflow-hidden">
+      <div class="d-flex flex-row">
+        <p class="col-6 text-right h4">Details</p>
+        <div class="col-6 text-right">
+          <button class="m-1">✖</button>
+        </div>
+      </div>
+      <hr>
+      <div class="d-flex flex-nowrap h-75">
+        <div class="col-4 d-flex flex-column h-100 justify-content-between">
+          <div class="w-100 h-75">
+            <img [src]="book.cover" class=" w-auto m-auto h-100">
+          </div>
+          <div class="flex flex-row justify-content-around w-100">
+            <p>Review: </p>
+            <p>Rating: {{book.rating}}</p>
+          </div>
+        </div>
+        <div class="col-8 m-1">
+          <p class="h5">{{book.title}}</p>
+          <small>{{book.author}}, {{book.genre}}</small>
+          <div class="w-100 p-1 overflow-auto h-75">
+            {{book.content}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="h-50 w-100 overflow-auto">
+      <div *ngFor="let review of book.reviews" class="m-2">
+        <hr>
+        <p class="h4">{{review.reviewer}}</p>
+        <p>{{review.message}}</p>
+      </div>
+    </div>
+  </div>
+
+
