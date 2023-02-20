@@ -1,0 +1,7 @@
+<div class="col-4">
+  <button class="btn btn-outline-secondary col-4 rounded-0 rounded-top">All</button>
+  <button class="btn btn-outline-secondary col-4 rounded-0 rounded-top">Recomended</button>
+</div>
+<div class="flex flex-row flex-wrap border border-1 border-black p-2 ">
+    <app-book-list-item *ngFor="let book of books" [book]="book" class="col-6 mt-1"/>
+</div>

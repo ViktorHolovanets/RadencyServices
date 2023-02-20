@@ -1,0 +1,14 @@
+<div class="flex flex-row col-11 bg-gray-300 h-100 rounded-1 border border-1 border-secondary m-auto">
+  <img [src]="book.cover" class="col-3 w-max-100 m-2">
+  <div class="col-6 text-center d-flex flex-col justify-content-between align-items-center">
+    <p class="h4">{{book.title}}</p>
+    <div class="flex flex-row justify-content-around w-100">
+      <p>Review: {{book.reviewsNumber}}</p>
+      <p>Rating: {{book.rating}}</p>
+    </div>
+  </div>
+  <div class="col-2 text-right">
+    <button class="btn btn-outline-secondary m-1 p-1">👁</button>
+    <button class="btn btn-outline-secondary m-1 p-1">🖊</button>
+  </div>
+</div>

@@ -193,6 +193,7 @@ namespace RadencyWebApplication.Controllers
                           id = r.book.Id,
                           title = r.book.Title,
                           author = r.book.Author,
+                          cover=r.book.Cover,
                           rating = (decimal)gR.Average(r => r.Score),
                           reviewsNumber = r.reviews
                       };
