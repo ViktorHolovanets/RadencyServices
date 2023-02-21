@@ -48,14 +48,14 @@ namespace RadencyWebApplication.Controllers
             return Ok(res.ToList());
         }
         [HttpGet("recommended")]
-        public async Task<IResult> GetRecommended()
+        public async Task<IActionResult> GetRecommended()
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
             string genre = request.Query["genre"].ToString();
             var res = GetAllBooks(genre);
             res = res.OrderByDescending(b => b.rating).Take(10);
-            return Results.Json(res, statusCode: 200);
+            return Ok(res);
         }
 
         [HttpGet("[controller]/{id}")]

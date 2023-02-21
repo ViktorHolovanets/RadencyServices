@@ -16,10 +16,14 @@ builder.Services.AddDbContext<ApiContext>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();  //Logger write in the Console
 builder.Logging.AddDebug();  //Logger write in the Debug
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+options.AddPolicy("Policy", builder => builder.WithOrigins("*").AllowAnyHeader()
+                                                  .AllowAnyMethod()));
 
 var app = builder.Build();
-app.UseCors(builder => builder.AllowAnyOrigin());
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseCors("Policy");
 Seed(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

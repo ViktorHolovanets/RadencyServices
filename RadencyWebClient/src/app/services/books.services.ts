@@ -6,23 +6,33 @@ import {ErrorService} from "./error.service";
 import {IBookAllInfo} from "../models/IBookAllInfo";
 import {FormGroup} from "@angular/forms";
 import {IBook} from "../models/IBook";
+import {env} from "../../env/env";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BooksServices {
   constructor(private http: HttpClient, private errorService: ErrorService) {
+    this.host=env.host
   }
+  host:string
   books: IBookInfo[] = [];
   getAll(): Observable<IBookInfo[]> {
-    return this.http.get<IBookInfo[]>('https://localhost:5000/api/books')
+    return this.http.get<IBookInfo[]>(`${this.host}/books`)
+      .pipe(
+        tap(books=>this.books=books),
+        catchError(this.errorHandler.bind(this))
+      );
+  }
+  getRecommended(): Observable<IBookInfo[]> {
+    return this.http.get<IBookInfo[]>(`${this.host}/recommended`)
       .pipe(
         tap(books=>this.books=books),
         catchError(this.errorHandler.bind(this))
       );
   }
   getBook(id:number): Observable<IBookAllInfo[]> {
-    return this.http.get<IBookAllInfo[]>('https://localhost:5000/api/books/'+id.toString())
+    return this.http.get<IBookAllInfo[]>(`${this.host}/books/`+id.toString())
       .pipe(
         catchError(this.errorHandler.bind(this))
       );
@@ -32,7 +42,7 @@ export class BooksServices {
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
     console.log(form);
-    return this.http.post<IBook>('https://localhost:5000/api/books/save',form,{headers:headers} )
+    return this.http.post<IBook>(`${this.host}/books/save`,form,{headers:headers} )
       .pipe(
         tap(book=>{
          let newBook= this.books.find(b=>b.id==book.id);

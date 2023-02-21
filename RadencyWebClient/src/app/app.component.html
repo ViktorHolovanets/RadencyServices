@@ -1,10 +1,12 @@
-<app-view-error/>
-<div class="container">
-  <div class="row">
-<app-view-book *ngIf="modalService.isVisible$ | async"/>
-    <p class="h1">Library</p>
-    <app-edit-book class="mb-2"/>
-    <app-book-list/>
+<div class="vh-100 overflow-hidden">
+  <app-view-error/>
+  <div class="container h-100">
+    <div class="row h-100">
+      <app-view-book *ngIf="modalService.isVisible$ | async"/>
+      <p class="h1">Library</p>
+      <app-edit-book class="mb-2"/>
+      <app-book-list class="h-50"/>
+    </div>
   </div>
 </div>
 
