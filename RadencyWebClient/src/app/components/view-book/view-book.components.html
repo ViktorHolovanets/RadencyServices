@@ -1,11 +1,12 @@
-<div class="bg-black/50 fixed top-0 right-0 left-0 bottom-0"></div>
-  <div
+<div class="bg-black/50 fixed top-0 right-0 left-0 bottom-0" (click)="modalService.close()"></div>
+  <app-loading *ngIf="loading"/>
+  <div *ngIf="!loading"
     class="h-75  w-50 absolute m-auto bg-white position-absolute top-50 start-50 translate-middle rounded p-2">
     <div class="h-50 w-100 overflow-hidden">
       <div class="d-flex flex-row">
         <p class="col-6 text-right h4">Details</p>
         <div class="col-6 text-right">
-          <button class="m-1">✖</button>
+          <button class="m-1" (click)="modalService.close()">✖</button>
         </div>
       </div>
       <hr>

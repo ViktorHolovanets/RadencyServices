@@ -57,7 +57,7 @@ namespace RadencyWebApplication.Controllers
         }
 
         [HttpGet("[controller]/{id}")]
-        public IResult GetAsync(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
@@ -89,9 +89,9 @@ namespace RadencyWebApplication.Controllers
             if (result.Count() < 1)
             {
                 _logger.LogWarning($"No related data to a book with ID {id} ");
-                return Results.BadRequest(new { message = "Not fount book" });
+                return BadRequest(new { message = "Not fount book" });
             }
-            return Results.Json(result);
+            return Ok(result.ToList());
         }
 
 

@@ -1,6 +1,7 @@
+<app-view-error/>
 <div class="container">
   <div class="row">
-    <app-view-book/>
+<app-view-book *ngIf="modalService.isVisible$ | async"/>
     <p class="h1">Library</p>
     <app-edit-book class="mb-2"/>
     <app-book-list/>

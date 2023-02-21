@@ -1,0 +1,35 @@
+<div class="border border-2 border-dark rounded p-2">
+  <p>Add Book</p>
+  <hr>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input  type="hidden" class="form-control"   placeholder="Enter title" formControlName="id" >
+    <div class="d-flex flex-row">
+      <div class="col-6 p-1">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control"   placeholder="Enter title" formControlName="title" >
+        </div>
+        <div class="form-group">
+          <label >Cover</label>
+          <input type="text" class="form-control"   placeholder="Enter cover" formControlName="cover">
+        </div>
+        <div class="form-group">
+          <label >Genre</label>
+          <input type="text" class="form-control"   placeholder="Enter genre" formControlName="genre">
+        </div>
+        <div class="form-group">
+          <label >Author</label>
+          <input type="text" class="form-control"   placeholder="Enter  author" formControlName="author">
+        </div>
+      </div>
+      <div class="col-6 d-flex">
+        <label class="col-2 ms-2">Content</label>
+        <textarea class="col-9 h-100 form-control w-75" formControlName="content"></textarea>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <button class="btn btn-primary">Add</button>
+      <input type="button" class="btn btn-danger ms-3" value="Clear" (click)="clear()"/>
+    </div>
+  </form>
+</div>
