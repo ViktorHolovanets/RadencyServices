@@ -127,7 +127,7 @@ namespace RadencyWebApplication.Controllers
 
 
         [HttpPut("[controller]/{id}/review")]
-        public async Task<IResult> SetReview(int id, Review review)
+        public async Task<IActionResult> SetReview(int id, Review review)
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
@@ -135,30 +135,30 @@ namespace RadencyWebApplication.Controllers
             if (book == null || !ModelState.IsValid)
             {
                 _logger.LogWarning("Bad requst");
-                return Results.BadRequest();
+                return BadRequest();
             }
             review.Book = book;
             _context.Reviews.Add(review);
             _context.SaveChanges();
-            return Results.Json(new { id = review.Id }, statusCode: 201);
+            return Ok(new { id = review.Id });
         }
         [HttpPut("[controller]/{id}/rate")]
-        public async Task<IResult> SetRating(int id, Rating rating)
+        public async Task<IActionResult> SetRating(int id, Rating rating)
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
             if (book == null || !ModelState.IsValid)
-                return Results.BadRequest();
+                return BadRequest();
             rating.Book = book;
             _context.Ratings.Add(rating);
             _context.SaveChanges();
-            return Results.Json(new { id = rating.Id }, statusCode: 201);
+            return Ok(new { id = rating.Id });
         }
 
 
         [HttpDelete("[controller]/{id}")]
-        public async Task<IResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
@@ -170,11 +170,11 @@ namespace RadencyWebApplication.Controllers
                 if (book != null)
                 {
                     _context.Books.Remove(book);
-                    return Results.Ok(new { message = "Success" });
+                    return Ok(new { message = "Success" });
                 }
-                return Results.BadRequest(new { message = "Book not found" });
+                return BadRequest(new { message = "Book not found" });
             }
-            return Results.BadRequest(new { message = "Invalid secret code" });
+            return BadRequest(new { message = "Invalid secret code" });
         }
         private IQueryable<BookInfo> GetAllBooks(string? genre = null)
         {
