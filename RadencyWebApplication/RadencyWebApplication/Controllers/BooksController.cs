@@ -131,7 +131,7 @@ namespace RadencyWebApplication.Controllers
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
-            var book = _context.Books.FirstOrDefault(b => b.Id == id);
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
             if (book == null || !ModelState.IsValid)
             {
                 _logger.LogWarning("Bad requst");
