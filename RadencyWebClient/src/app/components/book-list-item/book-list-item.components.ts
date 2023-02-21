@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {IBook} from "../../models/IBook";
+import {IBookInfo} from "../../models/IBookInfo";
 import {ModalService} from "../../services/modal.service";
 import {EditBookService} from "../../services/edit-book.service";
 
@@ -8,7 +8,7 @@ import {EditBookService} from "../../services/edit-book.service";
   templateUrl: './book-list-item.components.html',
 })
 export class BookItemComponent {
-  @Input() book: IBook
+  @Input() book: IBookInfo
 
   constructor(private modalService: ModalService, private  editService:EditBookService) {
   }

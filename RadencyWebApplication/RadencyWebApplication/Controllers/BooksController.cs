@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory.Query.Internal;
 using RadencyWebApplication.Models.Db;
@@ -15,6 +16,7 @@ namespace RadencyWebApplication.Controllers
 {
     [Route("api")]
     [ApiController]
+    
     public class BooksController : ControllerBase
     {
         ILogger<BooksController> _logger;
@@ -96,13 +98,13 @@ namespace RadencyWebApplication.Controllers
 
 
         [HttpPost("[controller]/save")]
-        public async Task<IResult> Post(Book book)
+        public async Task<IActionResult> Post(Book book)
         {
             var request = HttpContext.Request;
             WriteLogRequest(request);
             if (!ModelState.IsValid)
             {
-                return Results.BadRequest();
+                return BadRequest();
             }
             var temp = await _context.Books.FirstOrDefaultAsync(b => b.Id == book.Id);
             if (temp == null)
@@ -120,7 +122,7 @@ namespace RadencyWebApplication.Controllers
                 temp.Genre = book.Genre;
             }
             await _context.SaveChangesAsync();
-            return Results.Json(temp, statusCode: 201);
+            return Ok(temp);
         }
 
 

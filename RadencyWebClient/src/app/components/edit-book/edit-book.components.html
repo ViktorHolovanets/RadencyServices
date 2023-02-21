@@ -2,7 +2,7 @@
   <p>Add Book</p>
   <hr>
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <input  type="hidden" class="form-control"   placeholder="Enter title" formControlName="id" >
+    <input  type="hidden" formControlName="id" >
     <div class="d-flex flex-row">
       <div class="col-6 p-1">
         <div class="form-group">
@@ -28,7 +28,11 @@
       </div>
     </div>
     <div class="d-flex justify-content-center mt-3">
-      <button class="btn btn-primary">Add</button>
+      <button class="btn " [ngClass]="{
+      'btn-primary': !editService.isEdit$.value,
+      'btn-warning':editService.isEdit$.value}">
+        {{!editService.isEdit$.value ? 'Add' : 'Edit'}}
+      </button>
       <input type="button" class="btn btn-danger ms-3" value="Clear" (click)="clear()"/>
     </div>
   </form>

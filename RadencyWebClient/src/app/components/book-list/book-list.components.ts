@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {IBook} from "../../models/IBook";
+import {IBookInfo} from "../../models/IBookInfo";
 import {BooksServices} from "../../services/books.services";
 import {ModalService} from "../../services/modal.service";
 
@@ -9,16 +9,15 @@ import {ModalService} from "../../services/modal.service";
 })
 export class BookListComponent implements OnInit {
   title = 'RadencyWebClient';
-  books: IBook[] = [];
+
   loading = false;
 
-  constructor(private booksService: BooksServices) {
+  constructor(public booksService: BooksServices) {
   }
 
   ngOnInit(): void {
     this.loading = true;
     this.booksService.getAll().subscribe(books => {
-        this.books = books;
         this.loading = false;
       }
     )
